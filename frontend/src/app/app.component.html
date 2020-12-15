@@ -1,0 +1,194 @@
+
+<div class="container">
+  <h2 class="d-flex justify-content-center">LeanIX To Do Application</h2>
+  <h5 class="d-flex justify-content-center">Track your activities</h5>
+</div>
+<br/>
+<div class="container">
+  <div class="row">
+      <div class="col-md-12">
+          <div class="card card-white">
+              <div class="card-body">
+                <form [formGroup]="accountForm" (ngSubmit)="add()" class="form-inline">
+                  <div class="form-group mr-2">
+                    <label>Description: &nbsp;</label>
+                    <input type="text" class="form-control" id="description" formControlName="description">
+                  </div>
+                  <div class="form-group mr-2">
+                    <label>Tag: &nbsp;</label>
+                    <select id="priority" class="form-control" formControlName="tag"> 
+                      <option *ngFor="let tag of TagsList" value='{{tag.tag}}'>{{tag.tag}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group mr-2">
+                    <label>Start Date: &nbsp;</label>
+                    <input type="date" class="form-control" id="startDate" formControlName="startDate">
+                  </div>
+                  <div class="form-group mr-2">
+                    <label>End Date: &nbsp;</label>
+                    <input type="date" class="form-control" id="endDate" formControlName="endDate">
+                  </div>
+                  <div class="form-group mr-2">
+                    <button class="btn btn-primary btn-left" type="submit"><i class="fa fa-plus"></i>&nbsp;Add Task</button>
+                  </div>
+                </form>
+                <br/>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="card card-body h-100 justify-content-center">
+                  <div class="row">
+                    <!--<div class="col-sm-1">
+                      {{dataItem.id}}
+                    </div>-->
+                    <div class="col-sm-3">
+                      <b>Description</b>
+                    </div>
+                    <div class="col-sm-2">
+                      <b>Tag</b>
+                    </div>
+                    <div class="col-sm-2">
+                      <b>End Date </b>
+                    </div>
+                    <div class="col-sm-2">
+                      <b>Task Status </b>
+                    </div>
+                    
+                  </div>
+                  </div>
+                  </div>
+                  <div class="col-md-12" *ngFor="let dataItem of ToDoList">
+                    <div class="card card-body h-100 justify-content-center">
+                        <div class="row">
+                          <!--<div class="col-sm-1">
+                            {{dataItem.id}}
+                          </div>-->
+                          <div class="col-sm-3">
+                            {{dataItem.description}}
+                          </div>
+                          <div class="col-sm-2">
+                            {{dataItem.tag}}
+                          </div>
+                          <div class="col-sm-2">  
+                            {{days(dataItem.endDate)}}
+                          </div>
+                          <div class="col-sm-2">
+                            {{dataItem.status}}  
+                          </div>
+                          <div class="col-sm-1">
+                            <button class="btn btn-success" (click)="taskCompleted($event, dataItem)"><i class="fa fa-check"></i></button>
+                          </div>
+                          <div class="col-sm-1">
+                            <button class="btn btn-danger" (click)="taskDelete($event, dataItem)"><i class="fa fa-trash"></i></button>
+                          </div>
+                          <div class="col-sm-1">
+                            <button class="btn btn-primary" (click)="taskUpdate($event, dataItem)" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-pencil"></i></button>
+                          </div>
+                        </div>
+                      </div>   
+                  </div>
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <br/>
+  <div class="row">
+    <div class="col-md-12">
+        <div class="card card-white">
+            <div class="card-body">
+              <p>* If tag is note in list. Add it here</p>
+              <form [formGroup]="accountForm1" (ngSubmit)="addTag()" class="form-inline">
+                <div class="form-group mr-2">
+                  <label>Tag: &nbsp;</label>
+                  <input type="text" class="form-control" id="description" formControlName="tag">
+                </div>
+                <div class="form-group mr-2">
+                  <button class="btn btn-primary" type="submit"><i class="fa fa-plus"></i>&nbsp;Add</button>
+                </div>
+              </form>
+            </div>
+       </div>
+      </div>
+    </div>
+    <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="accountForm2" (ngSubmit)="updateTodo()" class="form-inline">
+      <div class="modal-body">
+        
+          <div class="form-group row">
+            <label for="id" class="col-sm-5 col-form-label">Id</label>
+            <div class="col-sm-7">
+            <input type="number" formControlName="id" class="form-control" id="id" value="{{CurrentData.id}}"  readonly>
+            </div>
+          </div>
+          <br/>
+          <div class="form-group row">
+            <label for="description-modal" class="col-sm-5 col-form-label">Description</label>
+            <div class="col-sm-7">
+            <input type="text" formControlName="description" class="form-control" id="description-modal" value="{{CurrentData.description}}">
+          </div>
+          </div>
+          <br/>
+          <div class="form-group row">
+            <label for="tag-modal" class="col-sm-5 col-form-label">Tag</label>
+            <div class="col-sm-7">
+            <select id="tag-modal" class="form-control" formControlName="tag" value="{{CurrentData.tag}}"> 
+              <option *ngFor="let tag of TagsList" value='{{tag.tag}}'>{{tag.tag}}</option>
+            </select>
+          </div>
+          </div>
+          <br/>
+          <div class="form-group">
+            <label for="start-modal" class="col-sm-5 col-form-label">Start Date</label>
+            <div class="col-sm-7">
+            <input type="date" formControlName="startDate" class="form-control" id="start-modal" value="{{CurrentData.startDate}}">
+            
+          </div>
+          </div>
+          <br/>
+          <div class="form-group">
+            <label for="end-modal" class="col-sm-5 col-form-label">End date</label>
+            <div class="col-sm-7">
+            <input type="date" formControlName="endDate" class="form-control" id="end-modal" value="{{CurrentData.endDate}}">
+          </div>
+          </div>
+          <br/>
+          <div class="form-group">
+            <label for="status-modal" class="col-sm-5 col-form-label">Status</label>
+            <div class="col-sm-7">
+            <select formControlName="status" class="form-control" id="status-modal" value="{{CurrentData.status}}">
+              <option value='pending'>Pending</option>
+              <option value='just-started'>Just Started</option> 
+              
+              <option value='middleway'>MiddleWay</option>
+              <option value='completed'>Completed</option>
+
+            </select>
+          </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="save" type="submit">Save changes</button>
+    
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+  $(document).ready(function(){
+    $("#save").click(function(){
+      $("#exampleModal").modal("hide");
+    })
+  });
+</script>
